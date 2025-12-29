@@ -52,9 +52,10 @@ public class TaskRepository : ITaskRepository
             using var connection = connectionFactory.CreateConnection();
             const string sql = """
                 SELECT id, title, description, status, priority,
-                       due_date AS DueDate, created_at AS CreatedAt, updated_at AS UpdatedAt
+                       due_date AS DueDate, created_at AS CreatedAt,
+                       updated_at AS UpdatedAt, is_deleted AS IsDeleted
                 FROM tasks
-                WHERE id = @Id
+                WHERE id = @Id AND is_deleted = FALSE
                 """;
 
             return await connection.QueryFirstOrDefaultAsync<TaskEntity>(sql, new { Id = id });
@@ -73,10 +74,11 @@ public class TaskRepository : ITaskRepository
         {
             using var connection = connectionFactory.CreateConnection();
             const string sql = """
-                INSERT INTO tasks (title, description, status, priority, due_date, created_at, updated_at)
-                VALUES (@Title, @Description, @Status, @Priority, @DueDate, @CreatedAt, @UpdatedAt)
+                INSERT INTO tasks (title, description, status, priority, due_date, created_at, updated_at, is_deleted)
+                VALUES (@Title, @Description, @Status, @Priority, @DueDate, @CreatedAt, @UpdatedAt, FALSE)
                 RETURNING id, title, description, status, priority,
-                          due_date AS DueDate, created_at AS CreatedAt, updated_at AS UpdatedAt
+                          due_date AS DueDate, created_at AS CreatedAt,
+                          updated_at AS UpdatedAt, is_deleted AS IsDeleted
                 """;
 
             var created = await connection.QueryFirstAsync<TaskEntity>(sql, entity);
@@ -104,7 +106,7 @@ public class TaskRepository : ITaskRepository
                     priority = @Priority,
                     due_date = @DueDate,
                     updated_at = @UpdatedAt
-                WHERE id = @Id
+                WHERE id = @Id AND is_deleted = FALSE
                 """;
 
             var affected = await connection.ExecuteAsync(sql, entity);
@@ -124,10 +126,16 @@ public class TaskRepository : ITaskRepository
         try
         {
             using var connection = connectionFactory.CreateConnection();
-            const string sql = "DELETE FROM tasks WHERE id = @Id";
+
+            // Soft delete - solo marca como eliminado
+            const string sql = """
+                UPDATE tasks
+                SET is_deleted = TRUE, updated_at = CURRENT_TIMESTAMP
+                WHERE id = @Id AND is_deleted = FALSE
+                """;
 
             var affected = await connection.ExecuteAsync(sql, new { Id = id });
-            logger.LogInformation("Task deleted: {TaskId}, Affected rows: {Rows}", id, affected);
+            logger.LogInformation("Task soft deleted: {TaskId}, Affected rows: {Rows}", id, affected);
             return affected > 0;
         }
         catch (Exception ex)
@@ -143,7 +151,7 @@ public class TaskRepository : ITaskRepository
         try
         {
             using var connection = connectionFactory.CreateConnection();
-            const string sql = "SELECT EXISTS(SELECT 1 FROM tasks WHERE id = @Id)";
+            const string sql = "SELECT EXISTS(SELECT 1 FROM tasks WHERE id = @Id AND is_deleted = FALSE)";
             return await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
         }
         catch (Exception ex)
@@ -167,6 +175,7 @@ public class TaskRepository : ITaskRepository
                     COALESCE(SUM(CASE WHEN status = 'Cancelled' THEN 1 ELSE 0 END), 0) AS Cancelled,
                     COALESCE(SUM(CASE WHEN due_date < CURRENT_DATE AND status NOT IN ('Completed', 'Cancelled') THEN 1 ELSE 0 END), 0) AS Overdue
                 FROM tasks
+                WHERE is_deleted = FALSE
                 """;
 
             var result = await connection.QueryFirstAsync(sql);
@@ -191,9 +200,10 @@ public class TaskRepository : ITaskRepository
         var parameters = new DynamicParameters();
         var sql = """
             SELECT id, title, description, status, priority,
-                   due_date AS DueDate, created_at AS CreatedAt, updated_at AS UpdatedAt
+                   due_date AS DueDate, created_at AS CreatedAt,
+                   updated_at AS UpdatedAt, is_deleted AS IsDeleted
             FROM tasks
-            WHERE 1=1
+            WHERE is_deleted = FALSE
             """;
 
         if (filter is null)
