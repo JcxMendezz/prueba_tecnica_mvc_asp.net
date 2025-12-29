@@ -1,14 +1,22 @@
-# Scripts de Base de Datos
+<a id="readme-top"></a>
 
-Scripts SQL para la gestión de la base de datos PostgreSQL.
+# Database
 
-## 📁 Archivos
+Scripts SQL para la gestión de la base de datos PostgreSQL del proyecto Task Management System.
+
+---
+
+## Archivos
 
 | Archivo | Descripción |
 |---------|-------------|
-| `init-database.sql` | Script de inicialización con tablas, índices y datos de prueba |
+| `init.sql` | Script de inicialización con tablas, índices, triggers y datos de prueba |
 
-## 🐳 Usar con Docker (Recomendado)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Docker (Recomendado)
 
 ### Iniciar la base de datos
 
@@ -19,7 +27,7 @@ docker-compose up -d database
 # Ver logs
 docker-compose logs -f database
 
-# Verificar que está corriendo
+# Verificar estado
 docker-compose ps
 ```
 
@@ -29,84 +37,133 @@ docker-compose ps
 # Usando docker exec
 docker exec -it task_management_db psql -U postgres -d task_management_dev
 
-# O usando psql local
+# Usando cliente local
 psql -h localhost -p 5432 -U postgres -d task_management_dev
-# Password: postgres123
 ```
 
-### Reiniciar la base de datos (borrar datos)
+### Reiniciar la base de datos
 
 ```bash
 # Detener y eliminar volúmenes
 docker-compose down -v
 
-# Volver a iniciar (ejecutará init-database.sql automáticamente)
+# Volver a iniciar
 docker-compose up -d database
 ```
 
-## 🔧 Configuración Manual (Sin Docker)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### 1. Crear la base de datos
+---
+
+## Configuración Manual
+
+### Crear la base de datos
 
 ```bash
-# Conectarse a PostgreSQL
 psql -U postgres
+```
 
-# Crear la base de datos
+```sql
 CREATE DATABASE task_management_dev;
-
-# Salir
 \q
 ```
 
-### 2. Ejecutar el script
+### Ejecutar el script
 
 ```bash
-psql -U postgres -d task_management_dev -f scripts/init-database.sql
+psql -U postgres -d task_management_dev -f database/init.sql
 ```
 
-### 3. Verificar la instalación
+### Verificar la instalación
 
 ```sql
--- Conectarse
 \c task_management_dev
-
--- Listar tablas
 \dt
-
--- Ver estructura
 \d tasks
-
--- Ver datos
 SELECT * FROM tasks WHERE is_deleted = FALSE;
 ```
 
-## 🔑 Credenciales
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-| Campo | Valor |
-|-------|-------|
+---
+
+## Credenciales
+
+| Parámetro | Valor |
+|-----------|-------|
 | Host | `localhost` |
 | Puerto | `5432` |
 | Base de datos | `task_management_dev` |
 | Usuario | `postgres` |
 | Contraseña | `postgres123` |
 
-## 📊 Connection String
+### Connection String
 
 ```
 Host=localhost;Port=5432;Database=task_management_dev;Username=postgres;Password=postgres123
 ```
 
-## 🗃️ Estructura de la Tabla `tasks`
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Estructura
+
+### Tabla `tasks`
 
 | Columna | Tipo | Descripción |
 |---------|------|-------------|
-| `id` | SERIAL | Clave primaria auto-incremental |
-| `title` | VARCHAR(200) | Título de la tarea (obligatorio) |
-| `description` | TEXT | Descripción detallada (opcional) |
-| `status` | VARCHAR(50) | Estado: Pending, InProgress, Completed, Cancelled |
-| `priority` | VARCHAR(20) | Prioridad: Low, Medium, High |
-| `due_date` | TIMESTAMP | Fecha de vencimiento (opcional) |
-| `created_at` | TIMESTAMP | Fecha de creación (automático) |
-| `updated_at` | TIMESTAMP | Última actualización (automático) |
-| `is_deleted` | BOOLEAN | Soft delete (default: FALSE) |
+| `id` | SERIAL | Clave primaria |
+| `title` | VARCHAR(200) | Título (obligatorio) |
+| `description` | TEXT | Descripción |
+| `status` | VARCHAR(50) | Pending, InProgress, Completed, Cancelled |
+| `priority` | VARCHAR(20) | Low, Medium, High |
+| `due_date` | TIMESTAMP | Fecha de vencimiento |
+| `created_at` | TIMESTAMP | Fecha de creación |
+| `updated_at` | TIMESTAMP | Última actualización |
+| `is_deleted` | BOOLEAN | Soft delete |
+
+### Índices
+
+| Índice | Columna | Descripción |
+|--------|---------|-------------|
+| `idx_tasks_status` | status | Filtro por estado |
+| `idx_tasks_priority` | priority | Filtro por prioridad |
+| `idx_tasks_due_date` | due_date | Ordenamiento por fecha |
+| `idx_tasks_created_at` | created_at | Ordenamiento por creación |
+| `idx_tasks_active` | status, priority | Consultas compuestas |
+
+### Triggers
+
+| Trigger | Descripción |
+|---------|-------------|
+| `trigger_tasks_updated_at` | Actualiza `updated_at` automáticamente en cada UPDATE |
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Diagrama
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                          tasks                              │
+├─────────────────────────────────────────────────────────────┤
+│ id           SERIAL        PRIMARY KEY                      │
+│ title        VARCHAR(200)  NOT NULL                         │
+│ description  TEXT                                           │
+│ status       VARCHAR(50)   NOT NULL  DEFAULT 'Pending'      │
+│ priority     VARCHAR(20)   NOT NULL  DEFAULT 'Medium'       │
+│ due_date     TIMESTAMPTZ                                    │
+│ created_at   TIMESTAMPTZ   NOT NULL  DEFAULT NOW()          │
+│ updated_at   TIMESTAMPTZ   NOT NULL  DEFAULT NOW()          │
+│ is_deleted   BOOLEAN       NOT NULL  DEFAULT FALSE          │
+├─────────────────────────────────────────────────────────────┤
+│ CONSTRAINTS                                                 │
+│  - chk_tasks_status: status IN (Pending, InProgress, ...)   │
+│  - chk_tasks_priority: priority IN (Low, Medium, High)      │
+│  - chk_tasks_title_not_empty: LENGTH(TRIM(title)) > 0       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
