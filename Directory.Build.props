@@ -1,0 +1,51 @@
+<Project>
+  <!-- Configuración global para todos los proyectos de la solución -->
+
+  <PropertyGroup>
+    <!-- Habilitar análisis de código -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>Recommended</AnalysisMode>
+
+    <!-- Tratar warnings como errores en Release -->
+    <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
+
+    <!-- Nullable reference types -->
+    <Nullable>enable</Nullable>
+
+    <!-- Implicit usings -->
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Información del proyecto -->
+    <Authors>Tu Nombre</Authors>
+    <Company>Tu Empresa</Company>
+
+    <!-- Generar documentación XML -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- Suprimir warnings de documentación faltante (ajustar según necesidad) -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <!-- Paquetes de análisis para todos los proyectos -->
+  <ItemGroup>
+    <!-- Analizadores de estilo y calidad de código -->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <!-- Mejores prácticas de async/await -->
+    <PackageReference Include="AsyncFixer" Version="1.6.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <!-- Detección de problemas de threading -->
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.12.19">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
