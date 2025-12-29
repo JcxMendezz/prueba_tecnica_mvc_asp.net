@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Npgsql" Version="10.0.1" />
+  </ItemGroup>
+
+  <!-- Suprimir warnings de StyleCop que son demasiado estrictos -->
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);SA1633;SA1200;SA1101;SA1600;SA1516;SA1515</NoWarn>
+  </PropertyGroup>
+  <!--
+    SA1633: File header - No requerido en desarrollo
+    SA1200: Using dentro de namespace - Estilo moderno usa usings fuera
+    SA1101: Prefijo this. - No es necesario con C# moderno
+    SA1600: Documentación XML - Habilitarlo cuando el proyecto esté más maduro
+    SA1516/SA1515: Líneas en blanco - Demasiado estricto
+  -->
+
+</Project>
