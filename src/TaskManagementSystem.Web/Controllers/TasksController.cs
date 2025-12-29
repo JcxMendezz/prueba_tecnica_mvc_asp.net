@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagementSystem.Web.Models.Enums;
 using TaskManagementSystem.Web.Models.ViewModels;
@@ -9,6 +10,7 @@ namespace TaskManagementSystem.Web.Controllers;
 /// Controlador para gestión de tareas.
 /// Implementa CRUD completo con manejo de errores.
 /// </summary>
+[SuppressMessage("Style", "VSTHRD200:Use Async suffix", Justification = "MVC controller actions use standard naming conventions")]
 public class TasksController : Controller
 {
     private readonly ITaskService taskService;
@@ -274,7 +276,7 @@ public class TasksController : Controller
             }
 
             var editModel = taskResult.Value!;
-            editModel.Status = request.Status;
+            editModel.Status = request.status;
 
             var result = await this.taskService.UpdateAsync(id, editModel);
 
@@ -296,5 +298,6 @@ public class TasksController : Controller
 /// <summary>
 /// Request model for AJAX status update.
 /// </summary>
-/// <param name="Status">The new status value.</param>
-public record StatusUpdateRequest(TaskItemStatus Status);
+/// <param name="status">The new status value.</param>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Record primary constructor parameters map to properties")]
+public record StatusUpdateRequest(TaskItemStatus status);

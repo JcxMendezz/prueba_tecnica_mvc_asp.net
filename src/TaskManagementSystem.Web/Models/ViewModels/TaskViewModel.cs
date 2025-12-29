@@ -1,3 +1,4 @@
+using System.Globalization;
 using TaskManagementSystem.Web.Models.Enums;
 
 namespace TaskManagementSystem.Web.Models.ViewModels;
@@ -7,23 +8,31 @@ namespace TaskManagementSystem.Web.Models.ViewModels;
 /// </summary>
 public class TaskViewModel
 {
+    /// <summary>Gets or sets the task ID.</summary>
     public int Id { get; set; }
 
+    /// <summary>Gets or sets the task title.</summary>
     public string Title { get; set; } = string.Empty;
 
+    /// <summary>Gets or sets the task description.</summary>
     public string? Description { get; set; }
 
+    /// <summary>Gets or sets the task status.</summary>
     public TaskItemStatus Status { get; set; }
 
+    /// <summary>Gets or sets the task priority.</summary>
     public TaskPriority Priority { get; set; }
 
+    /// <summary>Gets or sets the due date.</summary>
     public DateTime? DueDate { get; set; }
 
+    /// <summary>Gets or sets the creation date.</summary>
     public DateTime CreatedAt { get; set; }
 
+    /// <summary>Gets or sets the last update date.</summary>
     public DateTime UpdatedAt { get; set; }
 
-    /// <summary>Texto formateado del estado.</summary>
+    /// <summary>Gets the formatted status text.</summary>
     public string StatusText => Status switch
     {
         TaskItemStatus.Pending => "Pendiente",
@@ -33,7 +42,7 @@ public class TaskViewModel
         _ => "Desconocido",
     };
 
-    /// <summary>Texto formateado de la prioridad.</summary>
+    /// <summary>Gets the formatted priority text.</summary>
     public string PriorityText => Priority switch
     {
         TaskPriority.Low => "Baja",
@@ -42,7 +51,7 @@ public class TaskViewModel
         _ => "Desconocida",
     };
 
-    /// <summary>Clase CSS para el badge de estado.</summary>
+    /// <summary>Gets the CSS class for status badge.</summary>
     public string StatusBadgeClass => Status switch
     {
         TaskItemStatus.Pending => "bg-warning text-dark",
@@ -52,7 +61,7 @@ public class TaskViewModel
         _ => "bg-light text-dark",
     };
 
-    /// <summary>Clase CSS para el badge de prioridad.</summary>
+    /// <summary>Gets the CSS class for priority badge.</summary>
     public string PriorityBadgeClass => Priority switch
     {
         TaskPriority.Low => "bg-info text-dark",
@@ -61,15 +70,15 @@ public class TaskViewModel
         _ => "bg-light text-dark",
     };
 
-    /// <summary>Indica si la tarea está vencida.</summary>
+    /// <summary>Gets a value indicating whether the task is overdue.</summary>
     public bool IsOverdue => DueDate.HasValue
         && DueDate.Value.Date < DateTime.Today
         && Status != TaskItemStatus.Completed
         && Status != TaskItemStatus.Cancelled;
 
-    /// <summary>Fecha de vencimiento formateada.</summary>
-    public string DueDateFormatted => DueDate?.ToString("dd/MM/yyyy") ?? "Sin fecha";
+    /// <summary>Gets the formatted due date.</summary>
+    public string DueDateFormatted => DueDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) ?? "Sin fecha";
 
-    /// <summary>Fecha de creación formateada.</summary>
-    public string CreatedAtFormatted => CreatedAt.ToString("dd/MM/yyyy HH:mm");
+    /// <summary>Gets the formatted creation date.</summary>
+    public string CreatedAtFormatted => CreatedAt.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 }

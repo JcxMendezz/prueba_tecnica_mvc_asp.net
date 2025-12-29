@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace TaskManagementSystem.Web.Helpers.Results;
 
 /// <summary>
@@ -5,8 +7,16 @@ namespace TaskManagementSystem.Web.Helpers.Results;
 /// Implementa el patrón Result para manejo de errores sin excepciones.
 /// </summary>
 /// <typeparam name="T">Tipo de dato del resultado.</typeparam>
+[SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Factory pattern requires static methods")]
 public class Result<T>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result{T}"/> class.
+    /// </summary>
+    private Result()
+    {
+    }
+
     /// <summary>Gets a value indicating whether the operation was successful.</summary>
     public bool IsSuccess { get; private init; }
 
@@ -21,10 +31,6 @@ public class Result<T>
 
     /// <summary>Gets the success message if the operation succeeded.</summary>
     public string? Message { get; private init; }
-
-    private Result()
-    {
-    }
 
     /// <summary>
     /// Creates a successful result with data.
@@ -62,6 +68,13 @@ public class Result<T>
 /// </summary>
 public class Result
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result"/> class.
+    /// </summary>
+    private Result()
+    {
+    }
+
     /// <summary>Gets a value indicating whether the operation was successful.</summary>
     public bool IsSuccess { get; private init; }
 
@@ -73,10 +86,6 @@ public class Result
 
     /// <summary>Gets the success message if the operation succeeded.</summary>
     public string? Message { get; private init; }
-
-    private Result()
-    {
-    }
 
     /// <summary>
     /// Creates a successful result.

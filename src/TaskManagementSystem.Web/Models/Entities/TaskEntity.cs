@@ -5,27 +5,27 @@ namespace TaskManagementSystem.Web.Models.Entities;
 /// </summary>
 public class TaskEntity
 {
-    /// <summary>Identificador único.</summary>
+    /// <summary>Gets or sets the unique identifier.</summary>
     public int Id { get; set; }
 
-    /// <summary>Título de la tarea.</summary>
+    /// <summary>Gets or sets the task title.</summary>
     public string Title { get; set; } = string.Empty;
 
-    /// <summary>Descripción detallada.</summary>
+    /// <summary>Gets or sets the detailed description.</summary>
     public string? Description { get; set; }
 
-    /// <summary>Estado actual (como string para mapear con BD).</summary>
+    /// <summary>Gets or sets the current status (as string for DB mapping).</summary>
     public string Status { get; set; } = "Pending";
 
-    /// <summary>Nivel de prioridad (como string para mapear con BD).</summary>
+    /// <summary>Gets or sets the priority level (as string for DB mapping).</summary>
     public string Priority { get; set; } = "Medium";
 
-    /// <summary>Fecha de vencimiento.</summary>
+    /// <summary>Gets or sets the due date.</summary>
     public DateTime? DueDate { get; set; }
 
-    /// <summary>Fecha de creación.</summary>
+    /// <summary>Gets or sets the creation date.</summary>
     public DateTime CreatedAt { get; set; }
 
-    /// <summary>Fecha de última actualización.</summary>
+    /// <summary>Gets or sets the last update date.</summary>
     public DateTime UpdatedAt { get; set; }
 }
