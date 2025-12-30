@@ -1,0 +1,121 @@
+@model TaskManagementSystem.Web.Models.ViewModels.TaskViewModel
+@{
+    ViewData["Title"] = "Detalles de la Tarea";
+}
+
+<div class="container py-4">
+    <div class="row mb-3">
+        <div class="col-12 col-md-8 mx-auto">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <i class="bi bi-card-checklist me-2"></i>
+                    <h5 class="mb-0">Detalles de la Tarea</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Título</dt>
+                        <dd class="col-sm-8">@Model.Title</dd>
+
+                        <dt class="col-sm-4">Descripción</dt>
+                        <dd class="col-sm-8">@Model.Description</dd>
+
+                        <dt class="col-sm-4">Estado</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-@GetStatusBadge(Model.Status)">@Model.Status</span>
+                        </dd>
+
+                        <dt class="col-sm-4">Prioridad</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-@GetPriorityBadge(Model.Priority)">@Model.Priority</span>
+                        </dd>
+
+                        <dt class="col-sm-4">Fecha de vencimiento</dt>
+                        <dd class="col-sm-8">
+                            @(Model.DueDate.HasValue ? Model.DueDate.Value.ToString("dd/MM/yyyy") : "<span class='text-muted'>No definida</span>")
+                        </dd>
+
+                        <dt class="col-sm-4">Fecha de creación</dt>
+                        <dd class="col-sm-8">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-4">Última actualización</dt>
+                        <dd class="col-sm-8">@Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <!-- Eliminada: No mostrar, ya que no existe en el ViewModel y las tareas eliminadas no se muestran aquí -->
+                    </dl>
+                </div>
+                <div class="card-footer bg-light d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </a>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar esta tarea? Esta acción es reversible (eliminación lógica).</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Opcional: Cerrar modal tras submit exitoso
+        document.querySelectorAll('form[asp-action="Delete"]').forEach(form => {
+            form.addEventListener('submit', function () {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                if (modal) modal.hide();
+            });
+        });
+    </script>
+}
+
+@functions {
+    private string GetStatusBadge(TaskManagementSystem.Web.Models.Enums.TaskItemStatus status)
+    {
+        return status switch
+        {
+            TaskManagementSystem.Web.Models.Enums.TaskItemStatus.Pending => "warning",
+            TaskManagementSystem.Web.Models.Enums.TaskItemStatus.InProgress => "info",
+            TaskManagementSystem.Web.Models.Enums.TaskItemStatus.Completed => "success",
+            TaskManagementSystem.Web.Models.Enums.TaskItemStatus.Cancelled => "secondary",
+            _ => "light"
+        };
+    }
+    private string GetPriorityBadge(TaskManagementSystem.Web.Models.Enums.TaskPriority priority)
+    {
+        return priority switch
+        {
+            TaskManagementSystem.Web.Models.Enums.TaskPriority.Low => "secondary",
+            TaskManagementSystem.Web.Models.Enums.TaskPriority.Medium => "primary",
+            TaskManagementSystem.Web.Models.Enums.TaskPriority.High => "danger",
+            _ => "light"
+        };
+    }
+}
