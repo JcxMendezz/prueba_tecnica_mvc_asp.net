@@ -102,6 +102,26 @@ TaskManagementSystem.Web/
 └── Views/                # Vistas Razor
 ```
 
+
+#### Flujo de una Petición (MVC/API)
+
+| Paso | Origen | Destino | Descripción |
+|------|--------|---------|-------------|
+| 1 | Cliente (Browser/API) | Controller | El usuario realiza una petición HTTP (GET, POST, etc.) |
+| 2 | Controller | Service | El Controller recibe la petición y delega la lógica de negocio |
+| 3 | Service | Repository | El Service consulta o modifica datos a través del Repository |
+| 4 | Repository | Base de Datos | El Repository ejecuta consultas SQL usando Dapper |
+| 5 | Base de Datos | Repository | Se retornan los datos solicitados o el resultado de la operación |
+| 6 | Repository | Service | El Repository devuelve los datos al Service |
+| 7 | Service | Controller | El Service retorna el resultado al Controller |
+| 8 | Controller | Cliente (Browser/API) | El Controller responde:
+  - Si es MVC: pasa un ViewModel a la Vista Razor, que renderiza HTML
+  - Si es API: retorna JSON directamente |
+
+**Notas:**
+- El flujo es idéntico para peticiones web (MVC) y API, cambiando solo la respuesta final (HTML vs JSON).
+- Las validaciones se aplican tanto en Controller (ModelState) como en el frontend (JS/jQuery).
+
 Patrones implementados:
 
 - Repository Pattern
