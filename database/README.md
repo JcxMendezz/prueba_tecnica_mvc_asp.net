@@ -38,7 +38,7 @@ docker-compose ps
 docker exec -it task_management_db psql -U postgres -d task_management_dev
 
 # Usando cliente local (puerto 5433 para Docker)
-psql -h localhost -p 5433 -U postgres -d task_management_dev
+psql -h localhost -p 5432 -U postgres -d task_management_dev
 ```
 
 ### Reiniciar la base de datos
