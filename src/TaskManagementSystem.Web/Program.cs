@@ -1,4 +1,8 @@
-using Npgsql;
+using TaskManagementSystem.Web.Data;
+using TaskManagementSystem.Web.Repositories;
+using TaskManagementSystem.Web.Repositories.Interfaces;
+using TaskManagementSystem.Web.Services;
+using TaskManagementSystem.Web.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,15 +24,23 @@ builder.Configuration
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Registrar la conexión a PostgreSQL
-builder.Services.AddScoped<NpgsqlConnection>(_ =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    return new NpgsqlConnection(connectionString);
-});
+// Configurar connection string para el factory
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// Health checks (opcional pero recomendado)
-builder.Services.AddHealthChecks();
+// Registrar DbConnectionFactory (Singleton porque es thread-safe)
+builder.Services.AddSingleton<IDbConnectionFactory>(_ =>
+    new DbConnectionFactory(connectionString));
+
+// Registrar Repositories (Scoped - una instancia por request)
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+
+// Registrar Services (Scoped - una instancia por request)
+builder.Services.AddScoped<ITaskService, TaskService>();
+
+// Health checks con verificación de base de datos
+builder.Services.AddHealthChecks()
+    .AddNpgSql(connectionString, name: "postgresql");
 
 var app = builder.Build();
 
@@ -40,14 +52,11 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapStaticAssets();
