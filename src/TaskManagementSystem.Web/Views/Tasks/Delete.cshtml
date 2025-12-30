@@ -19,24 +19,24 @@
                         </div>
                     </div>
                     <dl class="row mb-0">
-                        <dt class="col-sm-4">Título</dt>
-                        <dd class="col-sm-8">@Model.Title</dd>
-                        <dt class="col-sm-4">Descripción</dt>
-                        <dd class="col-sm-8">@Model.Description</dd>
-                        <dt class="col-sm-4">Estado</dt>
-                        <dd class="col-sm-8">
+                        <dt class="col-12 col-sm-4">Título</dt>
+                        <dd class="col-12 col-sm-8">@Model.Title</dd>
+                        <dt class="col-12 col-sm-4">Descripción</dt>
+                        <dd class="col-12 col-sm-8">@Model.Description</dd>
+                        <dt class="col-12 col-sm-4">Estado</dt>
+                        <dd class="col-12 col-sm-8">
                             <span class="badge bg-@GetStatusBadge(Model.Status)">@Model.Status</span>
                         </dd>
-                        <dt class="col-sm-4">Prioridad</dt>
-                        <dd class="col-sm-8">
+                        <dt class="col-12 col-sm-4">Prioridad</dt>
+                        <dd class="col-12 col-sm-8">
                             <span class="badge bg-@GetPriorityBadge(Model.Priority)">@Model.Priority</span>
                         </dd>
-                        <dt class="col-sm-4">Fecha de vencimiento</dt>
-                        <dd class="col-sm-8">
+                        <dt class="col-12 col-sm-4">Fecha de vencimiento</dt>
+                        <dd class="col-12 col-sm-8">
                             @(Model.DueDate.HasValue ? Model.DueDate.Value.ToString("dd/MM/yyyy") : "<span class='text-muted'>No definida</span>")
                         </dd>
-                        <dt class="col-sm-4">Fecha de creación</dt>
-                        <dd class="col-sm-8">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+                        <dt class="col-12 col-sm-4">Fecha de creación</dt>
+                        <dd class="col-12 col-sm-8">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
                     </dl>
                 </div>
                 <div class="card-footer bg-light d-flex justify-content-between">

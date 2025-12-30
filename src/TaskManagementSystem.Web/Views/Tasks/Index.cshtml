@@ -318,7 +318,7 @@ else
                     @foreach (var task in Model.Tasks)
                     {
                         <tr class="@task.RowClass">
-                            <td>
+                            <td data-label="Tarea">
                                 <div class="d-flex align-items-start gap-3">
                                     <div class="task-checkbox">
                                         @if (task.IsCompleted)
@@ -342,25 +342,25 @@ else
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Estado">
                                 <span class="badge-elegant @task.StatusBadgeClass">
                                     <i class="bi @task.StatusIcon"></i>
                                     @task.StatusText
                                 </span>
                             </td>
-                            <td>
+                            <td data-label="Prioridad">
                                 <span class="badge-elegant @task.PriorityBadgeClass">
                                     <i class="bi @task.PriorityIcon"></i>
                                     @task.PriorityText
                                 </span>
                             </td>
-                            <td>
+                            <td data-label="Vencimiento">
                                 <div class="due-date @(task.IsOverdue ? "overdue" : "")">
                                     <i class="bi bi-calendar3 me-1"></i>
                                     <span>@task.DueDateRelative</span>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Acciones">
                                 <div class="task-actions justify-content-end">
                                     <a asp-action="Details" asp-route-id="@task.Id"
                                        class="btn btn-ghost btn-icon btn-sm"
