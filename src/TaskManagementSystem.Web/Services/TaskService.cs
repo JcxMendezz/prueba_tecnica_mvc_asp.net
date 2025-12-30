@@ -35,15 +35,27 @@ public class TaskService : ITaskService
         {
             this.logger.LogInformation("Getting all tasks with filter: {@Filter}", filter);
 
+            filter ??= new TaskFilterViewModel();
+
             var entities = await this.taskRepository.GetAllAsync(filter);
-            var tasks = entities.Select(MapToViewModel).ToList();
+            var allTasks = entities.Select(MapToViewModel).ToList();
             var counts = await this.taskRepository.GetCountByStatusAsync();
+
+            // Aplicar paginación en memoria (para simplificar)
+            var filteredCount = allTasks.Count;
+            var paginatedTasks = allTasks
+                .Skip((filter.Page - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToList();
 
             var viewModel = new TaskListViewModel
             {
-                Tasks = tasks,
-                Filter = filter ?? new TaskFilterViewModel(),
-                TotalCount = tasks.Count,
+                Tasks = paginatedTasks,
+                Filter = filter,
+                TotalCount = counts.Values.Sum(),
+                FilteredCount = filteredCount,
+                CurrentPage = filter.Page,
+                PageSize = filter.PageSize,
                 PendingCount = counts.GetValueOrDefault("Pending"),
                 InProgressCount = counts.GetValueOrDefault("InProgress"),
                 CompletedCount = counts.GetValueOrDefault("Completed"),
@@ -54,8 +66,7 @@ public class TaskService : ITaskService
         }
         catch (Exception ex)
         {
-            // Log detallado del error
-            this.logger.LogError(ex, "Error getting all tasks. Exception: {Message}, StackTrace: {StackTrace}", ex.Message, ex.StackTrace);
+            this.logger.LogError(ex, "Error getting all tasks. Exception: {Message}", ex.Message);
             return Result<TaskListViewModel>.Failure($"Error: {ex.Message}");
         }
     }

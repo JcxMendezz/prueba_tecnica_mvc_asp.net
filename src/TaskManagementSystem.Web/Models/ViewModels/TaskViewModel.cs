@@ -51,23 +51,42 @@ public class TaskViewModel
         _ => "Desconocida",
     };
 
-    /// <summary>Gets the CSS class for status badge.</summary>
+    /// <summary>Gets the CSS class for status badge (elegant style).</summary>
     public string StatusBadgeClass => Status switch
     {
-        TaskItemStatus.Pending => "bg-warning text-dark",
-        TaskItemStatus.InProgress => "bg-primary",
-        TaskItemStatus.Completed => "bg-success",
-        TaskItemStatus.Cancelled => "bg-secondary",
-        _ => "bg-light text-dark",
+        TaskItemStatus.Pending => "badge-pending",
+        TaskItemStatus.InProgress => "badge-in-progress",
+        TaskItemStatus.Completed => "badge-completed",
+        TaskItemStatus.Cancelled => "badge-cancelled",
+        _ => "badge-pending",
     };
 
-    /// <summary>Gets the CSS class for priority badge.</summary>
+    /// <summary>Gets the CSS class for priority badge (elegant style).</summary>
     public string PriorityBadgeClass => Priority switch
     {
-        TaskPriority.Low => "bg-info text-dark",
-        TaskPriority.Medium => "bg-warning text-dark",
-        TaskPriority.High => "bg-danger",
-        _ => "bg-light text-dark",
+        TaskPriority.Low => "badge-low",
+        TaskPriority.Medium => "badge-medium",
+        TaskPriority.High => "badge-high",
+        _ => "badge-medium",
+    };
+
+    /// <summary>Gets the icon for status.</summary>
+    public string StatusIcon => Status switch
+    {
+        TaskItemStatus.Pending => "bi-clock",
+        TaskItemStatus.InProgress => "bi-arrow-repeat",
+        TaskItemStatus.Completed => "bi-check-circle",
+        TaskItemStatus.Cancelled => "bi-x-circle",
+        _ => "bi-question-circle",
+    };
+
+    /// <summary>Gets the icon for priority.</summary>
+    public string PriorityIcon => Priority switch
+    {
+        TaskPriority.Low => "bi-arrow-down",
+        TaskPriority.Medium => "bi-dash",
+        TaskPriority.High => "bi-arrow-up",
+        _ => "bi-dash",
     };
 
     /// <summary>Gets a value indicating whether the task is overdue.</summary>
@@ -76,9 +95,92 @@ public class TaskViewModel
         && Status != TaskItemStatus.Completed
         && Status != TaskItemStatus.Cancelled;
 
+    /// <summary>Gets a value indicating whether the task is completed.</summary>
+    public bool IsCompleted => Status == TaskItemStatus.Completed;
+
+    /// <summary>Gets the task card CSS class.</summary>
+    public string CardClass
+    {
+        get
+        {
+            var classes = new List<string> { "task-card" };
+
+            classes.Add(Priority switch
+            {
+                TaskPriority.Low => "priority-low",
+                TaskPriority.Medium => "priority-medium",
+                TaskPriority.High => "priority-high",
+                _ => "priority-medium",
+            });
+
+            if (IsCompleted)
+            {
+                classes.Add("is-completed");
+            }
+
+            if (IsOverdue)
+            {
+                classes.Add("is-overdue");
+            }
+
+            return string.Join(" ", classes);
+        }
+    }
+
+    /// <summary>Gets the table row CSS class.</summary>
+    public string RowClass
+    {
+        get
+        {
+            if (IsOverdue)
+            {
+                return "is-overdue";
+            }
+
+            if (IsCompleted)
+            {
+                return "is-completed";
+            }
+
+            return string.Empty;
+        }
+    }
+
     /// <summary>Gets the formatted due date.</summary>
-    public string DueDateFormatted => DueDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) ?? "Sin fecha";
+    public string DueDateFormatted => DueDate?.ToString("dd MMM yyyy", new CultureInfo("es-ES")) ?? "Sin fecha";
+
+    /// <summary>Gets the relative due date text.</summary>
+    public string DueDateRelative
+    {
+        get
+        {
+            if (!DueDate.HasValue)
+            {
+                return "Sin fecha";
+            }
+
+            var today = DateTime.Today;
+            var dueDate = DueDate.Value.Date;
+            var diff = (dueDate - today).Days;
+
+            return diff switch
+            {
+                < 0 => $"Vencida hace {Math.Abs(diff)} días",
+                0 => "Vence hoy",
+                1 => "Vence mañana",
+                <= 7 => $"Vence en {diff} días",
+                _ => DueDateFormatted,
+            };
+        }
+    }
 
     /// <summary>Gets the formatted creation date.</summary>
     public string CreatedAtFormatted => CreatedAt.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
+    /// <summary>Gets short description for list view.</summary>
+    public string ShortDescription => string.IsNullOrEmpty(Description)
+        ? "Sin descripción"
+        : Description.Length > 100
+            ? Description[..97] + "..."
+            : Description;
 }

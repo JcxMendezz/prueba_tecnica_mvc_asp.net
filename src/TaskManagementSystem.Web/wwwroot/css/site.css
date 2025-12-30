@@ -848,6 +848,106 @@ textarea.form-control {
     to { transform: rotate(360deg); }
 }
 
+/* ---------- Task List Specific Styles ---------- */
+.task-title-link {
+    color: var(--color-slate-800);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.task-title-link:hover {
+    color: var(--color-primary);
+}
+
+.task-title-link.completed {
+    text-decoration: line-through;
+    color: var(--color-slate-400);
+}
+
+.task-description {
+    color: var(--color-slate-500);
+    font-size: var(--font-size-xs);
+    margin-top: var(--spacing-1);
+    line-height: 1.4;
+}
+
+.task-checkbox {
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.task-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.due-date {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-slate-600);
+}
+
+.due-date.overdue {
+    color: var(--color-danger);
+    font-weight: 500;
+}
+
+.due-date.overdue i {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Pagination Styles */
+.pagination {
+    gap: var(--spacing-1);
+}
+
+.pagination .page-link {
+    border: 1px solid var(--border-color);
+    color: var(--color-slate-600);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-sm);
+    transition: all var(--transition-fast);
+}
+
+.pagination .page-link:hover {
+    background-color: var(--color-slate-50);
+    border-color: var(--color-slate-300);
+    color: var(--color-slate-800);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: var(--color-slate-50);
+    color: var(--color-slate-400);
+    cursor: not-allowed;
+}
+
+.pagination-info {
+    font-size: var(--font-size-sm);
+}
+
+/* Input Group Styles */
+.input-group-text {
+    border-color: var(--border-color);
+}
+
+.input-group .form-control:focus {
+    z-index: 1;
+}
+
 /* ---------- Utilities ---------- */
 .text-muted {
     color: var(--color-slate-500);
