@@ -7,10 +7,10 @@ using TaskManagementSystem.Web.Services.Interfaces;
 namespace TaskManagementSystem.Web.Controllers;
 
 /// <summary>
-/// Controlador para gestión de tareas.
-/// Implementa CRUD completo con manejo de errores.
+/// Controller for task management.
+/// Implements full CRUD with error handling.
 /// </summary>
-[SuppressMessage("Style", "VSTHRD200:Use Async suffix", Justification = "MVC controller actions use standard naming conventions")]
+[SuppressMessage("Style", "VSTHRD200:Use Async suffix", Justification = "MVC controller actions use standard naming")]
 public class TasksController : Controller
 {
     private readonly ITaskService taskService;
@@ -19,8 +19,8 @@ public class TasksController : Controller
     /// <summary>
     /// Initializes a new instance of the <see cref="TasksController"/> class.
     /// </summary>
-    /// <param name="taskService">The task service.</param>
-    /// <param name="logger">The logger instance.</param>
+    /// <param name="taskService">The task service for managing tasks.</param>
+    /// <param name="logger">The logger instance for logging.</param>
     public TasksController(ITaskService taskService, ILogger<TasksController> logger)
     {
         this.taskService = taskService;
@@ -30,10 +30,10 @@ public class TasksController : Controller
     /// <summary>
     /// GET: /Tasks - Shows the task list with optional filters.
     /// </summary>
-    /// <param name="filter">Optional filter parameters.</param>
+    /// <param name="filter">Optional filter parameters for the task list.</param>
     /// <returns>The task list view.</returns>
     [HttpGet]
-    public async Task<IActionResult> IndexAsync([FromQuery] TaskFilterViewModel? filter)
+    public async Task<IActionResult> Index([FromQuery] TaskFilterViewModel? filter)
     {
         try
         {
@@ -58,10 +58,10 @@ public class TasksController : Controller
     /// <summary>
     /// GET: /Tasks/Details/5 - Shows task details.
     /// </summary>
-    /// <param name="id">The task ID.</param>
-    /// <returns>The task details view.</returns>
+    /// <param name="id">The task identifier.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet]
-    public async Task<IActionResult> DetailsAsync(int id)
+    public async Task<IActionResult> Details(int id)
     {
         try
         {
@@ -70,7 +70,7 @@ public class TasksController : Controller
             if (!result.IsSuccess)
             {
                 TempData["ErrorMessage"] = result.ErrorMessage;
-                return RedirectToAction(nameof(IndexAsync));
+                return RedirectToAction(nameof(Index));
             }
 
             return View(result.Value);
@@ -79,7 +79,7 @@ public class TasksController : Controller
         {
             this.logger.LogError(ex, "Error loading task details: {TaskId}", id);
             TempData["ErrorMessage"] = "Error al cargar los detalles de la tarea.";
-            return RedirectToAction(nameof(IndexAsync));
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -97,7 +97,7 @@ public class TasksController : Controller
     /// POST: /Tasks/Create - Creates a new task.
     /// </summary>
     /// <param name="model">The task creation model.</param>
-    /// <returns>Redirect to details or the form with errors.</returns>
+    /// <returns>Redirect to details on success, or the form with errors.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(TaskCreateViewModel model)
@@ -118,7 +118,7 @@ public class TasksController : Controller
             }
 
             TempData["SuccessMessage"] = result.Message;
-            return RedirectToAction(nameof(DetailsAsync), new { id = result.Value!.Id });
+            return RedirectToAction(nameof(Details), new { id = result.Value!.Id });
         }
         catch (Exception ex)
         {
@@ -131,7 +131,7 @@ public class TasksController : Controller
     /// <summary>
     /// GET: /Tasks/Edit/5 - Shows the edit task form.
     /// </summary>
-    /// <param name="id">The task ID.</param>
+    /// <param name="id">The task identifier.</param>
     /// <returns>The edit task view.</returns>
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
@@ -143,7 +143,7 @@ public class TasksController : Controller
             if (!result.IsSuccess)
             {
                 TempData["ErrorMessage"] = result.ErrorMessage;
-                return RedirectToAction(nameof(IndexAsync));
+                return RedirectToAction(nameof(Index));
             }
 
             return View(result.Value);
@@ -152,16 +152,16 @@ public class TasksController : Controller
         {
             this.logger.LogError(ex, "Error loading task for edit: {TaskId}", id);
             TempData["ErrorMessage"] = "Error al cargar la tarea para editar.";
-            return RedirectToAction(nameof(IndexAsync));
+            return RedirectToAction(nameof(Index));
         }
     }
 
     /// <summary>
     /// POST: /Tasks/Edit/5 - Updates a task.
     /// </summary>
-    /// <param name="id">The task ID.</param>
+    /// <param name="id">The task identifier.</param>
     /// <param name="model">The task edit model.</param>
-    /// <returns>Redirect to details or the form with errors.</returns>
+    /// <returns>Redirect to details on success, or the form with errors.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, TaskEditViewModel model)
@@ -171,7 +171,7 @@ public class TasksController : Controller
             if (id != model.Id)
             {
                 TempData["ErrorMessage"] = "ID de tarea inválido.";
-                return RedirectToAction(nameof(IndexAsync));
+                return RedirectToAction(nameof(Index));
             }
 
             if (!ModelState.IsValid)
@@ -188,7 +188,7 @@ public class TasksController : Controller
             }
 
             TempData["SuccessMessage"] = result.Message;
-            return RedirectToAction(nameof(DetailsAsync), new { id });
+            return RedirectToAction(nameof(Details), new { id });
         }
         catch (Exception ex)
         {
@@ -201,7 +201,7 @@ public class TasksController : Controller
     /// <summary>
     /// GET: /Tasks/Delete/5 - Shows delete confirmation.
     /// </summary>
-    /// <param name="id">The task ID.</param>
+    /// <param name="id">The task identifier.</param>
     /// <returns>The delete confirmation view.</returns>
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
@@ -213,7 +213,7 @@ public class TasksController : Controller
             if (!result.IsSuccess)
             {
                 TempData["ErrorMessage"] = result.ErrorMessage;
-                return RedirectToAction(nameof(IndexAsync));
+                return RedirectToAction(nameof(Index));
             }
 
             return View(result.Value);
@@ -222,14 +222,14 @@ public class TasksController : Controller
         {
             this.logger.LogError(ex, "Error loading task for delete: {TaskId}", id);
             TempData["ErrorMessage"] = "Error al cargar la tarea.";
-            return RedirectToAction(nameof(IndexAsync));
+            return RedirectToAction(nameof(Index));
         }
     }
 
     /// <summary>
-    /// POST: /Tasks/Delete/5 - Deletes a task.
+    /// POST: /Tasks/Delete/5 - Deletes a task (soft delete).
     /// </summary>
-    /// <param name="id">The task ID.</param>
+    /// <param name="id">The task identifier.</param>
     /// <returns>Redirect to index.</returns>
     [HttpPost]
     [ActionName("Delete")]
@@ -243,26 +243,26 @@ public class TasksController : Controller
             if (!result.IsSuccess)
             {
                 TempData["ErrorMessage"] = result.ErrorMessage;
-                return RedirectToAction(nameof(IndexAsync));
+                return RedirectToAction(nameof(Index));
             }
 
             TempData["SuccessMessage"] = result.Message;
-            return RedirectToAction(nameof(IndexAsync));
+            return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
         {
             this.logger.LogError(ex, "Error deleting task: {TaskId}", id);
             TempData["ErrorMessage"] = "Error al eliminar la tarea.";
-            return RedirectToAction(nameof(IndexAsync));
+            return RedirectToAction(nameof(Index));
         }
     }
 
     /// <summary>
     /// POST: /Tasks/UpdateStatus/5 - Quick status update via AJAX.
     /// </summary>
-    /// <param name="id">The task ID.</param>
+    /// <param name="id">The task identifier.</param>
     /// <param name="request">The status update request.</param>
-    /// <returns>JSON result.</returns>
+    /// <returns>JSON result with success status.</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] StatusUpdateRequest request)
@@ -276,7 +276,7 @@ public class TasksController : Controller
             }
 
             var editModel = taskResult.Value!;
-            editModel.Status = request.status;
+            editModel.Status = request.Status;
 
             var result = await this.taskService.UpdateAsync(id, editModel);
 
@@ -298,6 +298,8 @@ public class TasksController : Controller
 /// <summary>
 /// Request model for AJAX status update.
 /// </summary>
-/// <param name="status">The new status value.</param>
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Record primary constructor parameters map to properties")]
-public record StatusUpdateRequest(TaskItemStatus status);
+public record StatusUpdateRequest
+{
+    /// <summary>Gets the new status value.</summary>
+    public TaskItemStatus Status { get; init; }
+}
