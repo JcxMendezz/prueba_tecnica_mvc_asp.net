@@ -17,7 +17,7 @@ $newTask = @{
     description = "Creada desde script de prueba"
     status = 0
     priority = 1
-    dueDate = "2025-02-20"
+    dueDate = "2026-02-20"
 } | ConvertTo-Json
 
 $created = Invoke-RestMethod -Uri "http://localhost:5236/api/tasksapi" -Method Post -Body $newTask -ContentType "application/json"
@@ -33,7 +33,7 @@ $updateTask = @{
     description = "Modificada para probar PUT"
     status = 1
     priority = 2
-    dueDate = "2025-03-15"
+    dueDate = "2026-03-15"
 } | ConvertTo-Json
 
 Invoke-RestMethod -Uri "http://localhost:5236/api/tasksapi/$newId" -Method Put -Body $updateTask -ContentType "application/json" | ConvertTo-Json -Depth 3

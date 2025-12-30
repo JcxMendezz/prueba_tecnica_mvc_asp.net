@@ -128,24 +128,33 @@ Instrucciones para configurar el proyecto localmente.
 
 1. Clonar el repositorio
 
-    ```sh
-    git clone https://github.com/JcxMendezz/prueba_tecnica_mvc_asp.net.git
-    cd prueba_tecnica_mvc_asp.net
-    ```
+  **HTTPS:**
 
-2. Iniciar la base de datos con Docker
+  ```sh
+  git clone https://github.com/JcxMendezz/prueba_tecnica_mvc_asp.net.git
+  cd prueba_tecnica_mvc_asp.net
+  ```
+
+  **SSH:**
+
+  ```sh
+  git clone git@github.com:JcxMendezz/prueba_tecnica_mvc_asp.net.git
+  cd prueba_tecnica_mvc_asp.net
+  ```
+
+1. Iniciar la base de datos con Docker
 
     ```sh
     docker-compose up -d database
     ```
 
-3. Verificar que el contenedor está corriendo
+2. Verificar que el contenedor está corriendo
 
     ```sh
     docker-compose ps
     ```
 
-4. Configurar el connection string en `src/TaskManagementSystem.Web/appsettings.Development.json`
+3. Configurar el connection string en `src/TaskManagementSystem.Web/appsettings.Development.json`
 
     ```json
     {
@@ -155,14 +164,14 @@ Instrucciones para configurar el proyecto localmente.
     }
     ```
 
-5. Ejecutar la aplicación
+4. Ejecutar la aplicación
 
     ```sh
     cd src/TaskManagementSystem.Web
     dotnet run
     ```
 
-6. Acceder a la aplicación en `http://localhost:5236`
+5. Acceder a la aplicación en `http://localhost:5236`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -188,14 +197,20 @@ Invoke-RestMethod -Uri "http://localhost:5236/api/tasksapi" -Method Get | Conver
 Crear una tarea:
 
 ```powershell
-$body = @{
-    title = "Nueva tarea Ing. Fredy Cuellar"
-    description = "Descripción"
+Write-Host "`n[3] POST - Crear nueva tarea" -ForegroundColor Yellow
+$newTask = @{
+    title = "Nueva tarea de prueba"
+    description = "Creada desde script de prueba"
     status = 0
     priority = 1
+    dueDate = "2026-02-20"
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "http://localhost:5236/api/tasksapi" -Method Post -Body $body -ContentType "application/json"
+$created = Invoke-RestMethod -Uri "http://localhost:5236/api/tasksapi" -Method Post -Body $newTask -ContentType "application/json"
+$created | ConvertTo-Json -Depth 3
+$newId = $created.id
+Write-Host "Tarea creada con ID: $newId" -ForegroundColor Cyan
+
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -286,20 +301,54 @@ docker-compose up -d database
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Estructura del proyecto
-- [x] Configuración de base de datos
-- [x] CRUD de tareas (Backend)
-- [x] API REST
-- [ ] Vistas MVC (Frontend)
-- [ ] Filtros y búsqueda
-- [ ] Autenticación
-- [ ] Tests unitarios
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
----
+<!-- TESTING & IMPROVEMENTS -->
+## Testing & Mejoras Sugeridas
 
-<!-- LICENSE -->
+### Sugerencias de Pruebas Manuales
+
+- Crear, editar y eliminar tareas desde la interfaz web y vía API
+- Validar errores de formulario (campos obligatorios, fechas inválidas)
+- Probar filtros y búsqueda en la lista de tareas
+- Verificar paginación y ordenamiento
+- Probar la experiencia en dispositivos móviles (responsive)
+- Simular errores 404 y validar la página personalizada
+- Probar validaciones de backend enviando datos inválidos vía API
+
+### Ejemplos de Uso Avanzado de la API
+
+Actualizar una tarea existente:
+
+```powershell
+$body = @{
+  id = 1
+  title = "Tarea actualizada"
+  description = "Nueva descripción"
+  status = 2
+  priority = 2
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:5236/api/tasksapi/1" -Method Put -Body $body -ContentType "application/json"
+```
+
+Eliminar (soft delete) una tarea:
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:5236/api/tasksapi/1" -Method Delete
+```
+
+### Posibles Mejoras Futuras
+
+- Autenticación y autorización de usuarios
+- Gestión de usuarios y roles
+- Historial de cambios y auditoría
+- Notificaciones por email o push
+- Exportar tareas a Excel/CSV
+- Integración con servicios externos (Slack, Teams, etc.)
+- Tests automatizados (unitarios y de integración)
+- Mejoras de accesibilidad (a11y)
+
 ## License
 
 Distribuido bajo la licencia MIT. Ver `LICENSE` para más información.

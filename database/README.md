@@ -186,4 +186,25 @@ Host=localhost;Port=5432;Database=task_management_dev;Username=postgres;Password
 └─────────────────────────────────────────────────────────────┘
 ```
 
+## Sugerencias de Pruebas Manuales
+
+- Insertar tareas con todos los estados y prioridades
+- Probar inserción de títulos vacíos (debe fallar)
+- Actualizar tareas y verificar updated_at
+- Eliminar tareas y verificar is_deleted
+- Consultar tareas activas (is_deleted = FALSE)
+- Probar constraints de status y priority
+
+## Mejoras Futuras Sugeridas
+
+- Agregar tabla de usuarios y relaciones
+- Triggers para historial de cambios
+- Auditoría de operaciones
+- Optimización de índices para grandes volúmenes
+- Agregar tablas de usuarios y roles.
+- Historial de cambios en tareas.
+- Auditoría y logs.
+- Optimización de índices para grandes volúmenes de datos.
+
+---
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
