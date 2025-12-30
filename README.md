@@ -337,7 +337,18 @@ Eliminar (soft delete) una tarea:
 ```powershell
 Invoke-RestMethod -Uri "http://localhost:5236/api/tasksapi/1" -Method Delete
 ```
+## Decisiones Técnicas
 
+- **ASP.NET Core MVC**: Elegido por su robustez, soporte multiplataforma y separación clara de responsabilidades (MVC).
+- **Dapper**: Micro ORM para acceso a datos, priorizando rendimiento y control sobre las consultas SQL.
+- **Validaciones**: Uso de DataAnnotations y validaciones personalizadas tanto en backend como en frontend (JS/jQuery).
+- **Bootstrap 5**: Framework CSS para UI moderna, responsive y mobile-first.
+- **AJAX**: CRUD asíncrono con JavaScript para mejor experiencia de usuario y menor recarga de página.
+- **Soft Delete**: Eliminación lógica de tareas para preservar historial y evitar pérdida de datos.
+- **Docker**: Facilita la configuración y despliegue de la base de datos PostgreSQL en cualquier entorno.
+- **Patrones**: Repository, Factory, Dependency Injection y Result Pattern para mantener el código desacoplado, testeable y escalable.
+- **Custom 404**: Página de error personalizada para mejorar la experiencia de usuario.
+- **Documentación**: README detallado, ejemplos de API y sugerencias de pruebas para facilitar onboarding y mantenimiento.
 ### Posibles Mejoras Futuras
 
 - Autenticación y autorización de usuarios
