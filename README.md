@@ -371,7 +371,7 @@ Distribuido bajo la licencia MIT. Ver `LICENSE` para más información.
 <!-- CONTACT -->
 ## Contact
 
-Juan Camilo Méndez - [@JcxMendezz](https://github.com/JcxMendezz)
+Juan Camilo Méndez - Linkedin [@JcxMendezz](https://www.linkedin.com/in/jcxmendezz/)
 
 Project Link: [https://github.com/JcxMendezz/prueba_tecnica_mvc_asp.net](https://github.com/JcxMendezz/prueba_tecnica_mvc_asp.net)
 
