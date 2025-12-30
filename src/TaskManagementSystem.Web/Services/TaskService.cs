@@ -54,8 +54,9 @@ public class TaskService : ITaskService
         }
         catch (Exception ex)
         {
-            this.logger.LogError(ex, "Error getting all tasks");
-            return Result<TaskListViewModel>.Failure(ErrorMessages.UnexpectedError);
+            // Log detallado del error
+            this.logger.LogError(ex, "Error getting all tasks. Exception: {Message}, StackTrace: {StackTrace}", ex.Message, ex.StackTrace);
+            return Result<TaskListViewModel>.Failure($"Error: {ex.Message}");
         }
     }
 

@@ -28,4 +28,7 @@ public class TaskEntity
 
     /// <summary>Gets or sets the last update date.</summary>
     public DateTime UpdatedAt { get; set; }
+
+    /// <summary>Gets or sets a value indicating whether the task is soft deleted.</summary>
+    public bool IsDeleted { get; set; }
 }

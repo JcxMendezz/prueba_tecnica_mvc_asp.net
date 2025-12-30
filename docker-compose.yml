@@ -1,0 +1,59 @@
+# ===========================================
+# Docker Compose - Task Management System
+# ===========================================
+
+services:
+  # ===========================================
+  # Base de datos PostgreSQL
+  # ===========================================
+  database:
+    container_name: task_management_db
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: keymaster?
+      POSTGRES_DB: task_management_dev
+    volumes:
+      # Persistencia de datos
+      - postgres_data:/var/lib/postgresql/data
+      # Scripts de inicialización (monta toda la carpeta)
+      # Docker ejecuta todos los archivos .sql en orden alfabético
+      - ./database:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d task_management_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - task_network
+
+  # ===========================================
+  # Aplicación Web (opcional - para producción)
+  # ===========================================
+  # web:
+  #   container_name: task_management_web
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5000:8080"
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=task_management_dev;Username=postgres;Password=postgres123
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy
+  #   networks:
+  #     - task_network
+
+volumes:
+  postgres_data:
+    name: task_management_postgres_data
+
+networks:
+  task_network:
+    driver: bridge
