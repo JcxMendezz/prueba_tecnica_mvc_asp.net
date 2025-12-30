@@ -82,14 +82,14 @@ CREATE TRIGGER trigger_tasks_updated_at
 -- ===========================================
 INSERT INTO tasks (title, description, status, priority, due_date) VALUES
     (
-        'Configurar proyecto',
+        'Configurar proyecto de Ingeniero Fredy Cuellar',
         'Configurar el proyecto inicial con todas las dependencias necesarias para el desarrollo.',
         'Completed',
         'High',
         CURRENT_TIMESTAMP + INTERVAL '1 day'
     ),
     (
-        'Implementar CRUD de tareas',
+        'Implementar CRUD de tareas Ing Mateo',
         'Crear las operaciones básicas para gestionar tareas: crear, leer, actualizar y eliminar.',
         'InProgress',
         'High',

@@ -37,8 +37,8 @@ docker-compose ps
 # Usando docker exec
 docker exec -it task_management_db psql -U postgres -d task_management_dev
 
-# Usando cliente local
-psql -h localhost -p 5432 -U postgres -d task_management_dev
+# Usando cliente local (puerto 5433 para Docker)
+psql -h localhost -p 5433 -U postgres -d task_management_dev
 ```
 
 ### Reiniciar la base de datos
@@ -89,19 +89,39 @@ SELECT * FROM tasks WHERE is_deleted = FALSE;
 
 ## Credenciales
 
+### Docker (Puerto 5433)
+
+| Parámetro | Valor |
+|-----------|-------|
+| Host | `localhost` |
+| Puerto | `5433` |
+| Base de datos | `task_management_dev` |
+| Usuario | `postgres` |
+| Contraseña | `keymaster?` |
+
+**Connection String:**
+
+```text
+Host=localhost;Port=5433;Database=task_management_dev;Username=postgres;Password=keymaster?
+```
+
+### Local (Puerto 5432)
+
 | Parámetro | Valor |
 |-----------|-------|
 | Host | `localhost` |
 | Puerto | `5432` |
 | Base de datos | `task_management_dev` |
 | Usuario | `postgres` |
-| Contraseña | `postgres123` |
+| Contraseña | *(tu contraseña local)* |
 
-### Connection String
+**Connection String:**
 
+```text
+Host=localhost;Port=5432;Database=task_management_dev;Username=postgres;Password=TU_PASSWORD
 ```
-Host=localhost;Port=5432;Database=task_management_dev;Username=postgres;Password=postgres123
-```
+
+> **Nota:** El puerto `5433` se usa en Docker para evitar conflictos si ya tienes PostgreSQL instalado localmente en el puerto `5432`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -145,7 +165,7 @@ Host=localhost;Port=5432;Database=task_management_dev;Username=postgres;Password
 
 ## Diagrama
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                          tasks                              │
 ├─────────────────────────────────────────────────────────────┤

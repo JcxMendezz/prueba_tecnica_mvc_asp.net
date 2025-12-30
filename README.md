@@ -26,6 +26,8 @@
   </p>
 </div>
 
+---
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Tabla de Contenidos</summary>
@@ -62,23 +64,23 @@ Sistema web para la gestión de tareas que permite crear, visualizar, editar y e
 
 Características principales:
 
-* CRUD completo de tareas con validaciones
-* Filtros por estado (Pendiente, En Progreso, Completada, Cancelada)
-* Filtros por prioridad (Baja, Media, Alta)
-* Búsqueda por título y descripción
-* Soft delete (eliminación lógica)
-* API REST para integración
-* Contenedorización con Docker
+- CRUD completo de tareas con validaciones
+- Filtros por estado (Pendiente, En Progreso, Completada, Cancelada)
+- Filtros por prioridad (Baja, Media, Alta)
+- Búsqueda por título y descripción
+- Soft delete (eliminación lógica)
+- API REST para integración
+- Contenedorización con Docker
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
-* [![.NET][dotnet-shield]][dotnet-url]
-* [![PostgreSQL][postgresql-shield]][postgresql-url]
-* [![Docker][docker-shield]][docker-url]
-* [![Bootstrap][bootstrap-shield]][bootstrap-url]
-* [![jQuery][jquery-shield]][jquery-url]
+- [![.NET][dotnet-shield]][dotnet-url]
+- [![PostgreSQL][postgresql-shield]][postgresql-url]
+- [![Docker][docker-shield]][docker-url]
+- [![Bootstrap][bootstrap-shield]][bootstrap-url]
+- [![jQuery][jquery-shield]][jquery-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -86,7 +88,7 @@ Características principales:
 
 El proyecto implementa una arquitectura en capas con separación de responsabilidades:
 
-```
+```text
 TaskManagementSystem.Web/
 ├── Controllers/          # Controladores MVC y API
 ├── Services/             # Lógica de negocio
@@ -100,12 +102,12 @@ TaskManagementSystem.Web/
 └── Views/                # Vistas Razor
 ```
 
-**Patrones implementados:**
+Patrones implementados:
 
-* Repository Pattern
-* Dependency Injection
-* Result Pattern
-* Factory Pattern
+- Repository Pattern
+- Dependency Injection
+- Result Pattern
+- Factory Pattern
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -118,53 +120,49 @@ Instrucciones para configurar el proyecto localmente.
 
 ### Prerequisites
 
-* [.NET 10 SDK](https://dotnet.microsoft.com/download)
-* [Docker Desktop](https://www.docker.com/products/docker-desktop) (recomendado)
-* [PostgreSQL 16](https://www.postgresql.org/download/) (si no usa Docker)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) (recomendado)
+- [PostgreSQL 16](https://www.postgresql.org/download/) (si no usa Docker)
 
 ### Installation
 
 1. Clonar el repositorio
 
-   ```sh
-   git clone https://github.com/JcxMendezz/prueba_tecnica_mvc_asp.net.git
-   cd prueba_tecnica_mvc_asp.net
-   ```
+    ```sh
+    git clone https://github.com/JcxMendezz/prueba_tecnica_mvc_asp.net.git
+    cd prueba_tecnica_mvc_asp.net
+    ```
 
 2. Iniciar la base de datos con Docker
 
-   ```sh
-   docker-compose up -d database
-   ```
+    ```sh
+    docker-compose up -d database
+    ```
 
 3. Verificar que el contenedor está corriendo
 
-   ```sh
-   docker-compose ps
-   ```
+    ```sh
+    docker-compose ps
+    ```
 
 4. Configurar el connection string en `src/TaskManagementSystem.Web/appsettings.Development.json`
 
-   ```json
-   {
-     "ConnectionStrings": {
-       "DefaultConnection": "Host=localhost;Port=5432;Database=task_management_dev;Username=postgres;Password=TU_PASSWORD"
-     }
-   }
-   ```
+    ```json
+    {
+      "ConnectionStrings": {
+        "DefaultConnection": "Host=localhost;Port=5433;Database=task_management_dev;Username=postgres;Password=keymaster?"
+      }
+    }
+    ```
 
 5. Ejecutar la aplicación
 
-   ```sh
-   cd src/TaskManagementSystem.Web
-   dotnet run
-   ```
+    ```sh
+    cd src/TaskManagementSystem.Web
+    dotnet run
+    ```
 
-6. Acceder a la aplicación
-
-   ```
-   http://localhost:5236
-   ```
+6. Acceder a la aplicación en `http://localhost:5236`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -181,17 +179,17 @@ Acceder a `http://localhost:5236` para usar la interfaz gráfica.
 
 Ejemplos de uso con PowerShell:
 
-**Obtener todas las tareas:**
+Obtener todas las tareas:
 
 ```powershell
 Invoke-RestMethod -Uri "http://localhost:5236/api/tasksapi" -Method Get | ConvertTo-Json
 ```
 
-**Crear una tarea:**
+Crear una tarea:
 
 ```powershell
 $body = @{
-    title = "Nueva tarea"
+    title = "Nueva tarea Ing. Fredy Cuellar"
     description = "Descripción"
     status = 0
     priority = 1
@@ -262,12 +260,12 @@ docker-compose up -d database
 | Parámetro | Valor |
 |-----------|-------|
 | Host | `localhost` |
-| Puerto | `5432` |
+| Puerto | `5433` |
 | Base de datos | `task_management_dev` |
 | Usuario | `postgres` |
-| Contraseña | `postgres123` |
+| Contraseña | `keymaster?` |
 
-### Estructura de la tabla `tasks`
+### Estructura de la tabla tasks
 
 | Columna | Tipo | Descripción |
 |---------|------|-------------|
@@ -288,14 +286,14 @@ docker-compose up -d database
 <!-- ROADMAP -->
 ## Roadmap
 
-* [x] Estructura del proyecto
-* [x] Configuración de base de datos
-* [x] CRUD de tareas (Backend)
-* [x] API REST
-* [ ] Vistas MVC (Frontend)
-* [ ] Filtros y búsqueda
-* [ ] Autenticación
-* [ ] Tests unitarios
+- [x] Estructura del proyecto
+- [x] Configuración de base de datos
+- [x] CRUD de tareas (Backend)
+- [x] API REST
+- [ ] Vistas MVC (Frontend)
+- [ ] Filtros y búsqueda
+- [ ] Autenticación
+- [ ] Tests unitarios
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
