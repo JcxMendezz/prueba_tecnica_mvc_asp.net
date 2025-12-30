@@ -197,7 +197,57 @@ var TaskForm = (function () {
                 if (typeof App !== 'undefined' && App.restoreSubmitButton) {
                     App.restoreSubmitButton(form);
                 }
+                return;
             }
+
+            // --- AJAX SUBMIT ---
+            e.preventDefault();
+            e.stopPropagation();
+
+            var isEditForm = window.location.pathname.toLowerCase().includes('/edit');
+            var isCreateForm = window.location.pathname.toLowerCase().includes('/create');
+            var url = isCreateForm
+                ? '/api/tasksapi'
+                : isEditForm
+                    ? '/api/tasksapi/' + (form.elements['Id'] ? form.elements['Id'].value : '')
+                    : form.action;
+            var method = isCreateForm ? 'POST' : isEditForm ? 'PUT' : 'POST';
+
+var data = {
+    id: form.elements['Id'] ? parseInt(form.elements['Id'].value, 10) : undefined,
+    title: form.elements['Title'].value,
+    description: form.elements['Description'].value,
+    status: parseInt(form.elements['Status'].value, 10),
+    priority: parseInt(form.elements['Priority'].value, 10),
+    dueDate: form.elements['DueDate'].value
+};
+
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
+            .then(result => {
+                if (typeof Alerts !== 'undefined' && Alerts.success) {
+                    Alerts.success(isEditForm ? 'Tarea actualizada exitosamente' : 'Tarea creada exitosamente');
+                } else {
+                    alert(isEditForm ? 'Tarea actualizada exitosamente' : 'Tarea creada exitosamente');
+                }
+                setTimeout(function () {
+                    window.location.href = '/Tasks';
+                }, 1000);
+            })
+            .catch(err => {
+                if (typeof Alerts !== 'undefined' && Alerts.error) {
+                    Alerts.error(err.error || (isEditForm ? 'Error al actualizar la tarea' : 'Error al crear la tarea'));
+                } else {
+                    alert(err.error || (isEditForm ? 'Error al actualizar la tarea' : 'Error al crear la tarea'));
+                }
+            });
         });
 
         // Limpiar errores al escribir
@@ -258,16 +308,16 @@ var TaskForm = (function () {
                 var dateInput = document.getElementById('DueDate');
 
                 if (titleInput && titleInput.value.trim()) {
-                    var draft = {
-                        title: titleInput.value,
-                        description: descInput ? descInput.value : '',
-                        dueDate: dateInput ? dateInput.value : '',
-                        savedAt: new Date().toISOString()
+                    var data = {
+                        title: form.elements['Title'].value,
+                        description: form.elements['Description'].value,
+                        status: parseInt(form.elements['Status'].value, 10),
+                        priority: parseInt(form.elements['Priority'].value, 10),
+                        dueDate: form.elements['DueDate'].value
                     };
-                    localStorage.setItem(storageKey, JSON.stringify(draft));
-                }
-            } catch (e) {
-                console.warn('Error saving draft:', e);
+                    if (isEditForm && form.elements['Id']) {
+                        data.id = parseInt(form.elements['Id'].value, 10);
+                    }
             }
         }, 30000);
 

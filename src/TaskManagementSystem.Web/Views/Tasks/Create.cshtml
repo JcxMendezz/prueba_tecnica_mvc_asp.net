@@ -72,18 +72,10 @@
                                     Estado <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="Status" class="form-select">
-                                    <option value="@TaskItemStatus.Pending">
-                                        <i class="bi bi-clock"></i> Pendiente
-                                    </option>
-                                    <option value="@TaskItemStatus.InProgress">
-                                        <i class="bi bi-arrow-repeat"></i> En Progreso
-                                    </option>
-                                    <option value="@TaskItemStatus.Completed">
-                                        <i class="bi bi-check-circle"></i> Completada
-                                    </option>
-                                    <option value="@TaskItemStatus.Cancelled">
-                                        <i class="bi bi-x-circle"></i> Cancelada
-                                    </option>
+                                    <option value="0">Pendiente</option>
+                                    <option value="1">En Progreso</option>
+                                    <option value="2">Completada</option>
+                                    <option value="3">Cancelada</option>
                                 </select>
                                 <span asp-validation-for="Status" class="form-error"></span>
                             </div>
@@ -94,15 +86,9 @@
                                     Prioridad <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="Priority" class="form-select">
-                                    <option value="@TaskPriority.Low">
-                                        <i class="bi bi-arrow-down"></i> Baja
-                                    </option>
-                                    <option value="@TaskPriority.Medium">
-                                        <i class="bi bi-dash"></i> Media
-                                    </option>
-                                    <option value="@TaskPriority.High">
-                                        <i class="bi bi-arrow-up"></i> Alta
-                                    </option>
+                                    <option value="0">Baja</option>
+                                    <option value="1">Media</option>
+                                    <option value="2">Alta</option>
                                 </select>
                                 <span asp-validation-for="Priority" class="form-error"></span>
                             </div>

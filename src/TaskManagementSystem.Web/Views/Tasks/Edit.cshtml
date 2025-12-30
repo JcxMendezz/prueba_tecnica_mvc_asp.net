@@ -85,18 +85,10 @@
                                     Estado <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="Status" class="form-select">
-                                    <option value="@TaskItemStatus.Pending" selected="@(Model.Status == TaskItemStatus.Pending)">
-                                        Pendiente
-                                    </option>
-                                    <option value="@TaskItemStatus.InProgress" selected="@(Model.Status == TaskItemStatus.InProgress)">
-                                        En Progreso
-                                    </option>
-                                    <option value="@TaskItemStatus.Completed" selected="@(Model.Status == TaskItemStatus.Completed)">
-                                        Completada
-                                    </option>
-                                    <option value="@TaskItemStatus.Cancelled" selected="@(Model.Status == TaskItemStatus.Cancelled)">
-                                        Cancelada
-                                    </option>
+                                    <option value="0" selected="@((int)Model.Status == 0)">Pendiente</option>
+                                    <option value="1" selected="@((int)Model.Status == 1)">En Progreso</option>
+                                    <option value="2" selected="@((int)Model.Status == 2)">Completada</option>
+                                    <option value="3" selected="@((int)Model.Status == 3)">Cancelada</option>
                                 </select>
                                 <span asp-validation-for="Status" class="form-error"></span>
                             </div>
@@ -107,15 +99,9 @@
                                     Prioridad <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="Priority" class="form-select">
-                                    <option value="@TaskPriority.Low" selected="@(Model.Priority == TaskPriority.Low)">
-                                        Baja
-                                    </option>
-                                    <option value="@TaskPriority.Medium" selected="@(Model.Priority == TaskPriority.Medium)">
-                                        Media
-                                    </option>
-                                    <option value="@TaskPriority.High" selected="@(Model.Priority == TaskPriority.High)">
-                                        Alta
-                                    </option>
+                                    <option value="0" selected="@((int)Model.Priority == 0)">Baja</option>
+                                    <option value="1" selected="@((int)Model.Priority == 1)">Media</option>
+                                    <option value="2" selected="@((int)Model.Priority == 2)">Alta</option>
                                 </select>
                                 <span asp-validation-for="Priority" class="form-error"></span>
                             </div>

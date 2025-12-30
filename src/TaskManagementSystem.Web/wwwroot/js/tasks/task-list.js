@@ -85,6 +85,41 @@ var TaskList = (function () {
         });
     }
 
+    /**
+     * Elimina una tarea por AJAX y actualiza la UI
+     * @param {number} taskId
+     * @param {HTMLElement} row
+     */
+    function deleteTaskAjax(taskId, row) {
+        if (!confirm('¿Seguro que deseas eliminar esta tarea?')) return;
+
+        fetch(`/api/tasksapi/${taskId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() || ''
+            }
+        })
+        .then(res => res.ok ? res.json() : Promise.reject(res))
+        .then(data => {
+            Alerts.success(data.message || 'Tarea eliminada exitosamente');
+            if (row) row.remove();
+        })
+        .catch(() => Alerts.error('Error al eliminar la tarea'));
+    }
+
+    // Delegar evento en la tabla
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.task-actions .btn-delete-ajax').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const row = btn.closest('tr');
+                const taskId = btn.dataset.taskId;
+                deleteTaskAjax(taskId, row);
+            });
+        });
+    });
+
     // Inicializar cuando el DOM esté listo
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
