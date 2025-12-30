@@ -242,6 +242,7 @@ public class TaskService : ITaskService
                 Status = Enum.Parse<TaskItemStatus>(entity.Status),
                 Priority = Enum.Parse<TaskPriority>(entity.Priority),
                 DueDate = entity.DueDate,
+                CreatedAt = entity.CreatedAt,
             };
 
             return Result<TaskEditViewModel>.Success(editModel);

@@ -11,7 +11,7 @@ public class TaskListViewModel
 #pragma warning restore SA1010 // Opening square brackets should be spaced correctly
 
     /// <summary>Gets or sets the applied filters.</summary>
-    public TaskFilterViewModel Filter { get; set; } = new();
+    public TaskFilterViewModel Filter { get; set; } = new ();
 
     /// <summary>Gets or sets the total count of all tasks (without pagination).</summary>
     public int TotalCount { get; set; }
