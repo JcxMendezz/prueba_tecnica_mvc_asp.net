@@ -1,50 +1,102 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TaskManagementSystem.Web</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <meta name="description" content="Sistema de gestión de tareas" />
+    <title>@ViewData["Title"] - Task Manager</title>
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TaskManagementSystem.Web.styles.css" asp-append-version="true" />
 </head>
-<body>
+
+<body class="d-flex flex-column min-vh-100">
+    <!-- Header -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TaskManagementSystem.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <nav class="navbar navbar-expand-lg navbar-elegant">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Tasks" asp-action="Index">
+                    <i class="bi bi-check2-square"></i>
+                    <span>TaskFlow</span>
+                </a>
+
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="bi bi-list fs-4"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Tasks" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"
+                                asp-controller="Tasks" asp-action="Index">
+                                <i class="bi bi-list-check me-1"></i>
+                                Tareas
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Create" ? "active" : "")"
+                                asp-controller="Tasks" asp-action="Create">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                Nueva
+                            </a>
+                        </li>
+                        <li class="nav-item ms-lg-2">
+                            <a class="nav-link nav-icon" href="/health" target="_blank" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" title="Estado del sistema">
+                                <i class="bi bi-heart-pulse"></i>
+                            </a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- Main Content -->
+    <main class="flex-grow-1 py-4">
         <div class="container">
-            &copy; 2025 - TaskManagementSystem.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <!-- Alerts -->
+            @await Html.PartialAsync("_AlertsPartial")
+
+            <!-- Page Content -->
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-elegant">
+        <div class="container">
+            <div class="footer-content">
+                <span>&copy; @DateTime.Now.Year TaskFlow</span>
+                <a href="https://github.com/JcxMendezz" target="_blank" class="d-flex align-items-center gap-1">
+                    <i class="bi bi-github"></i>
+                    <span>JcxMendezz</span>
+                </a>
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <!-- Custom JS -->
+    <script src="~/js/shared/alerts.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
