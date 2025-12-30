@@ -26,7 +26,7 @@ public class TaskFilterViewModel
     public int Page { get; set; } = 1;
 
     /// <summary>Gets or sets tamaño de página.</summary>
-    public int PageSize { get; set; } = 10;
+    public int PageSize { get; set; } = 5;
 
     /// <summary>Gets a value indicating whether indica si hay filtros activos.</summary>
     public bool HasActiveFilters => Status.HasValue || Priority.HasValue || !string.IsNullOrWhiteSpace(SearchTerm);

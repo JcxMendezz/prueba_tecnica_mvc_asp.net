@@ -40,7 +40,7 @@ public class TaskListViewModel
     public int CurrentPage { get; set; } = 1;
 
     /// <summary>Gets or sets page size.</summary>
-    public int PageSize { get; set; } = 10;
+    public int PageSize { get; set; } = 5;
 
     /// <summary>Gets or sets total number of filtered items.</summary>
     public int FilteredCount { get; set; }
