@@ -21,8 +21,14 @@ builder.Configuration
 // Servicios
 // ===========================================
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+// Add services to the container con Runtime Compilation
+var mvcBuilder = builder.Services.AddControllersWithViews();
+
+// Habilitar recompilación de vistas en desarrollo (Hot Reload para .cshtml)
+if (builder.Environment.IsDevelopment())
+{
+    mvcBuilder.AddRazorRuntimeCompilation();
+}
 
 // Configurar connection string para el factory
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -54,8 +60,23 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+else
+{
+    // En desarrollo, mostrar página de excepciones detallada
+    app.UseDeveloperExceptionPage();
+}
 
 app.UseHttpsRedirection();
+
+// Manejo de error 404 personalizado
+app.UseStatusCodePages(async context =>
+{
+    if (context.HttpContext.Response.StatusCode == 404)
+    {
+        context.HttpContext.Response.Redirect("/Home/Error404");
+    }
+});
+
 app.UseRouting();
 app.UseAuthorization();
 

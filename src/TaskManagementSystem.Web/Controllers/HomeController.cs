@@ -37,4 +37,14 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+    /// <summary>
+    /// Shows the 404 error page.
+    /// </summary>
+    /// <returns>The 404 error view.</returns>
+    public IActionResult Error404()
+    {
+        Response.StatusCode = 404;
+        return View("Error404");
+    }
 }
