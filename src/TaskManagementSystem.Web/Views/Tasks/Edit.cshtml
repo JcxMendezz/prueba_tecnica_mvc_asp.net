@@ -1,0 +1,174 @@
+@model TaskManagementSystem.Web.Models.ViewModels.TaskEditViewModel
+@{
+    ViewData["Title"] = "Editar Tarea";
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item">
+                    <a asp-action="Index" class="text-decoration-none">
+                        <i class="bi bi-list-check me-1"></i>Tareas
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="text-decoration-none">
+                        @Model.Title
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Editar</li>
+            </ol>
+        </nav>
+        <h1>Editar Tarea</h1>
+        <p class="page-subtitle">Modifica los campos de la tarea</p>
+    </div>
+</div>
+
+<!-- Form Card -->
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>
+                    <i class="bi bi-pencil me-2"></i>
+                    Editar Información
+                </span>
+                <span class="text-muted text-sm">
+                    <i class="bi bi-calendar3 me-1"></i>
+                    Creada: @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                </span>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Edit" method="post" id="taskForm" novalidate>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="CreatedAt" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert-elegant alert-danger mb-4" role="alert"></div>
+
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label asp-for="Title" class="form-label">
+                            Título <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Title"
+                               class="form-control"
+                               placeholder="Ingresa el título de la tarea"
+                               maxlength="200"
+                               autofocus />
+                        <span asp-validation-for="Title" class="form-error"></span>
+                        <div class="form-hint">
+                            <span id="titleCounter">@(Model.Title?.Length ?? 0)</span>/200 caracteres
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label asp-for="Description" class="form-label">Descripción</label>
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Describe los detalles de la tarea (opcional)"
+                                  maxlength="1000"></textarea>
+                        <span asp-validation-for="Description" class="form-error"></span>
+                        <div class="form-hint">
+                            <span id="descriptionCounter">@(Model.Description?.Length ?? 0)</span>/1000 caracteres
+                        </div>
+                    </div>
+
+                    <!-- Status & Priority Row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Status" class="form-label">
+                                    Estado <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Status" class="form-select">
+                                    <option value="0" selected="@((int)Model.Status == 0)">Pendiente</option>
+                                    <option value="1" selected="@((int)Model.Status == 1)">En Progreso</option>
+                                    <option value="2" selected="@((int)Model.Status == 2)">Completada</option>
+                                    <option value="3" selected="@((int)Model.Status == 3)">Cancelada</option>
+                                </select>
+                                <span asp-validation-for="Status" class="form-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Priority" class="form-label">
+                                    Prioridad <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Priority" class="form-select">
+                                    <option value="0" selected="@((int)Model.Priority == 0)">Baja</option>
+                                    <option value="1" selected="@((int)Model.Priority == 1)">Media</option>
+                                    <option value="2" selected="@((int)Model.Priority == 2)">Alta</option>
+                                </select>
+                                <span asp-validation-for="Priority" class="form-error"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Due Date -->
+                    <div class="form-group">
+                        <label asp-for="DueDate" class="form-label">Fecha de Vencimiento</label>
+                        <input asp-for="DueDate"
+                               type="date"
+                               class="form-control"
+                               id="DueDate" />
+                        <span asp-validation-for="DueDate" class="form-error"></span>
+                        <div class="form-hint">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Puedes modificar la fecha de vencimiento
+                        </div>
+                    </div>
+
+                    <!-- Read-only Info -->
+                    <div class="form-group">
+                        <div class="p-3 rounded" style="background-color: var(--color-slate-50);">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="detail-label">ID de Tarea</div>
+                                    <div class="detail-value">#@Model.Id</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-label">Fecha de Creación</div>
+                                    <div class="detail-value">
+                                        <i class="bi bi-calendar3 me-1"></i>
+                                        @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="row g-2 mt-4 pt-3 border-top">
+                        <div class="col-12 col-md-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-check-lg me-1"></i>
+                                Guardar Cambios
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary btn-lg w-100">
+                                <i class="bi bi-x-lg me-1"></i>
+                                Cancelar
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger btn-lg w-100">
+                                <i class="bi bi-trash3 me-1"></i>
+                                Eliminar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/tasks/task-form.js" asp-append-version="true"></script>
+}

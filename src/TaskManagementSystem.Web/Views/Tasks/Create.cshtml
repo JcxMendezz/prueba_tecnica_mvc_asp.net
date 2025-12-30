@@ -1,0 +1,148 @@
+@model TaskManagementSystem.Web.Models.ViewModels.TaskCreateViewModel
+@{
+    ViewData["Title"] = "Nueva Tarea";
+    var today = DateTime.Today.ToString("yyyy-MM-dd");
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item">
+                    <a asp-action="Index" class="text-decoration-none">
+                        <i class="bi bi-list-check me-1"></i>Tareas
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Nueva Tarea</li>
+            </ol>
+        </nav>
+        <h1>Crear Nueva Tarea</h1>
+        <p class="page-subtitle">Completa los campos para agregar una nueva tarea</p>
+    </div>
+</div>
+
+<!-- Form Card -->
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-plus-circle me-2"></i>
+                Información de la Tarea
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post" id="taskForm" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert-elegant alert-danger mb-4" role="alert"></div>
+
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label asp-for="Title" class="form-label">
+                            Título <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Title"
+                               class="form-control"
+                               placeholder="Ingresa el título de la tarea"
+                               maxlength="200"
+                               autofocus />
+                        <span asp-validation-for="Title" class="form-error"></span>
+                        <div class="form-hint">
+                            <span id="titleCounter">0</span>/200 caracteres
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label asp-for="Description" class="form-label">Descripción</label>
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Describe los detalles de la tarea (opcional)"
+                                  maxlength="1000"></textarea>
+                        <span asp-validation-for="Description" class="form-error"></span>
+                        <div class="form-hint">
+                            <span id="descriptionCounter">0</span>/1000 caracteres
+                        </div>
+                    </div>
+
+                    <!-- Status & Priority Row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Status" class="form-label">
+                                    Estado <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Status" class="form-select">
+                                    <option value="0">Pendiente</option>
+                                    <option value="1">En Progreso</option>
+                                    <option value="2">Completada</option>
+                                    <option value="3">Cancelada</option>
+                                </select>
+                                <span asp-validation-for="Status" class="form-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Priority" class="form-label">
+                                    Prioridad <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Priority" class="form-select">
+                                    <option value="0">Baja</option>
+                                    <option value="1">Media</option>
+                                    <option value="2">Alta</option>
+                                </select>
+                                <span asp-validation-for="Priority" class="form-error"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Due Date -->
+                    <div class="form-group">
+                        <label asp-for="DueDate" class="form-label">Fecha de Vencimiento</label>
+                        <input asp-for="DueDate"
+                               type="date"
+                               class="form-control"
+                               min="@today"
+                               id="DueDate" />
+                        <span asp-validation-for="DueDate" class="form-error"></span>
+                        <div class="form-hint">
+                            <i class="bi bi-info-circle me-1"></i>
+                            La fecha debe ser igual o posterior a hoy
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="d-flex gap-3 mt-4 pt-3 border-top">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-lg me-1"></i>
+                            Crear Tarea
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-lg me-1"></i>
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h6 class="d-flex align-items-center gap-2 mb-3">
+                    <i class="bi bi-lightbulb text-warning"></i>
+                    Consejos
+                </h6>
+                <ul class="mb-0 ps-3" style="font-size: var(--font-size-sm); color: var(--color-slate-600);">
+                    <li>Usa títulos claros y descriptivos para identificar fácilmente tus tareas</li>
+                    <li>Asigna prioridad alta solo a tareas urgentes e importantes</li>
+                    <li>Establece fechas de vencimiento realistas para mantener el control</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/tasks/task-form.js" asp-append-version="true"></script>
+}
