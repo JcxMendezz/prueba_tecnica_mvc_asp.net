@@ -115,6 +115,16 @@
                     <option value="Status" selected="@(Model.Filter.SortBy == "Status")">Estado</option>
                 </select>
             </div>
+                     <!-- Page Size -->
+            <div class="filter-group" style="flex: 0 0 100px;">
+                <label for="PageSize">Mostrar</label>
+                <select class="form-select" id="PageSize" name="PageSize" onchange="this.form.submit()">
+                    <option value="5" selected="@(Model.Filter.PageSize == 5)">5</option>
+                    <option value="10" selected="@(Model.Filter.PageSize == 10)">10</option>
+                    <option value="25" selected="@(Model.Filter.PageSize == 25)">25</option>
+                    <option value="50" selected="@(Model.Filter.PageSize == 50)">50</option>
+                </select>
+            </div>
 
             <!-- Actions -->
             <div class="filter-group d-flex gap-2" style="flex: 0 0 auto;">
