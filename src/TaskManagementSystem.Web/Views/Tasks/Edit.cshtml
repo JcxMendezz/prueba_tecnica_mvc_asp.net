@@ -52,8 +52,8 @@
                         <label asp-for="Title" class="form-label">
                             Título <span class="text-danger">*</span>
                         </label>
-                        <input asp-for="Title" 
-                               class="form-control" 
+                        <input asp-for="Title"
+                               class="form-control"
                                placeholder="Ingresa el título de la tarea"
                                maxlength="200"
                                autofocus />
@@ -66,8 +66,8 @@
                     <!-- Description -->
                     <div class="form-group">
                         <label asp-for="Description" class="form-label">Descripción</label>
-                        <textarea asp-for="Description" 
-                                  class="form-control" 
+                        <textarea asp-for="Description"
+                                  class="form-control"
                                   rows="4"
                                   placeholder="Describe los detalles de la tarea (opcional)"
                                   maxlength="1000"></textarea>
@@ -125,8 +125,8 @@
                     <!-- Due Date -->
                     <div class="form-group">
                         <label asp-for="DueDate" class="form-label">Fecha de Vencimiento</label>
-                        <input asp-for="DueDate" 
-                               type="date" 
+                        <input asp-for="DueDate"
+                               type="date"
                                class="form-control"
                                id="DueDate" />
                         <span asp-validation-for="DueDate" class="form-error"></span>

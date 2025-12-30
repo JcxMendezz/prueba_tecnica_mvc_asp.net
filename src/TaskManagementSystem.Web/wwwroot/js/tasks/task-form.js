@@ -29,15 +29,15 @@ var TaskForm = (function () {
     function setupCharacterCounters() {
         var titleInput = document.getElementById('Title');
         var titleCounter = document.getElementById('titleCounter');
-        
+
         if (titleInput && titleCounter) {
             // Actualizar contador inicial
             titleCounter.textContent = titleInput.value.length;
-            
+
             titleInput.addEventListener('input', function () {
                 var length = this.value.length;
                 titleCounter.textContent = length;
-                
+
                 // Cambiar color si se acerca al límite
                 if (length >= config.titleMaxLength * 0.9) {
                     titleCounter.classList.add('text-danger');
@@ -52,15 +52,15 @@ var TaskForm = (function () {
 
         var descInput = document.getElementById('Description');
         var descCounter = document.getElementById('descriptionCounter');
-        
+
         if (descInput && descCounter) {
             // Actualizar contador inicial
             descCounter.textContent = descInput.value.length;
-            
+
             descInput.addEventListener('input', function () {
                 var length = this.value.length;
                 descCounter.textContent = length;
-                
+
                 if (length >= config.descriptionMaxLength * 0.9) {
                     descCounter.classList.add('text-danger');
                 } else if (length >= config.descriptionMaxLength * 0.75) {
@@ -104,9 +104,9 @@ var TaskForm = (function () {
      */
     function validateDueDate(input, checkFuture) {
         var value = input.value;
-        var errorSpan = document.querySelector('[data-valmsg-for="DueDate"]') || 
+        var errorSpan = document.querySelector('[data-valmsg-for="DueDate"]') ||
                         input.nextElementSibling;
-        
+
         // Limpiar error previo
         if (errorSpan && errorSpan.classList.contains('form-error')) {
             errorSpan.textContent = '';
@@ -145,7 +145,7 @@ var TaskForm = (function () {
             if (titleInput) {
                 var title = titleInput.value.trim();
                 var titleError = document.querySelector('[data-valmsg-for="Title"]');
-                
+
                 titleInput.classList.remove('is-invalid');
                 if (titleError) titleError.textContent = '';
 
@@ -185,7 +185,7 @@ var TaskForm = (function () {
             if (!isValid) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 // Scroll al primer error
                 var firstError = form.querySelector('.is-invalid');
                 if (firstError) {
@@ -231,19 +231,19 @@ var TaskForm = (function () {
             if (draft) {
                 var data = JSON.parse(draft);
                 var shouldRestore = confirm('Se encontró un borrador guardado. ¿Desea restaurarlo?');
-                
+
                 if (shouldRestore) {
                     if (data.title) document.getElementById('Title').value = data.title;
                     if (data.description) document.getElementById('Description').value = data.description;
                     if (data.dueDate) document.getElementById('DueDate').value = data.dueDate;
-                    
+
                     // Actualizar contadores
                     var titleCounter = document.getElementById('titleCounter');
                     var descCounter = document.getElementById('descriptionCounter');
                     if (titleCounter) titleCounter.textContent = (data.title || '').length;
                     if (descCounter) descCounter.textContent = (data.description || '').length;
                 }
-                
+
                 localStorage.removeItem(storageKey);
             }
         } catch (e) {
