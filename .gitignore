@@ -114,6 +114,8 @@ secrets.json
 
 # Secrets and environment
 .env
+.env.local
+.env.*.local
 .env.*
 *.env
 !.env.example
