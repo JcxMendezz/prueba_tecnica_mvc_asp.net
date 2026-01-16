@@ -1,0 +1,47 @@
+# ===========================================
+# Docker Ignore - Excluir del build
+# ===========================================
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Build outputs
+**/bin/
+**/obj/
+**/out/
+
+# Logs
+*.log
+logs/
+
+# Environment files (seguridad)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Tests
+**/TestResults/
+**/*.Tests/
+
+# Documentation
+*.md
+!README.md
+
+# Docker
+docker-compose*.yml
+dockerfile.dev
+
+# Misc
+*.tmp
+*.bak
+Thumbs.db
+.DS_Store
