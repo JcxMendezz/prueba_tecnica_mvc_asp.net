@@ -156,12 +156,14 @@ else
     app.UseHttpsRedirection();
 }
 
-app.UseStatusCodePages(async context =>
+app.UseStatusCodePages(context =>
 {
     if (context.HttpContext.Response.StatusCode == 404)
     {
         context.HttpContext.Response.Redirect("/Home/Error404");
     }
+
+    return Task.CompletedTask;
 });
 
 app.UseRouting();
