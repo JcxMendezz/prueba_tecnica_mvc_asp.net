@@ -21,6 +21,9 @@ RUN dotnet restore "src/TaskManagementSystem.Web/TaskManagementSystem.Web.csproj
 # Copiar todo el código fuente
 COPY . .
 
+# Eliminar global.json para usar el SDK disponible en la imagen
+RUN rm -f /src/global.json
+
 # Compilar
 WORKDIR "/src/src/TaskManagementSystem.Web"
 RUN dotnet build "TaskManagementSystem.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
